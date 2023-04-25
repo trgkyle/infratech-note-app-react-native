@@ -1,12 +1,13 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Appbar, FAB, TextInput} from 'react-native-paper';
 import {INoteItem, defaultNoteList} from '../mocks/data';
 import NoteItem from '../components/NoteItem';
 import {MainScreenScreenProps} from './screen.types';
+import {NoteContext} from '../../App';
 
 const MainScreen: React.FC<MainScreenScreenProps> = ({navigation}) => {
-  const [data, setData] = useState<INoteItem[]>(defaultNoteList);
+  const {noteList, setNoteList} = useContext(NoteContext);
   const [inputTextSearch, setInputTextSearch] = useState<string>('');
   const [sortByAsc, setSortByAsc] = useState<boolean>(false);
 
@@ -14,8 +15,11 @@ const MainScreen: React.FC<MainScreenScreenProps> = ({navigation}) => {
     setInputTextSearch(text);
   };
 
-  const navigateToMainScreen = (item: INoteItem) => {
-    navigation.navigate('EditNoteScreen', {name: 'EditNoteScreen', item});
+  const navigateToMainScreen = (index: number) => {
+    navigation.navigate('EditNoteScreen', {
+      name: 'EditNoteScreen',
+      noteIndex: index,
+    });
   };
   const searchNoteByInput = useCallback(
     (inputTextSearchP: string) => {
@@ -27,9 +31,9 @@ const MainScreen: React.FC<MainScreenScreenProps> = ({navigation}) => {
           return false;
         })
         .sort((a, b) => (sortByAsc ? a.id - b.id : b.id - a.id));
-      setData(newData);
+      setNoteList(newData);
     },
-    [sortByAsc],
+    [setNoteList, sortByAsc],
   );
 
   useEffect(() => {
@@ -59,10 +63,13 @@ const MainScreen: React.FC<MainScreenScreenProps> = ({navigation}) => {
         />
         <View style={styles.listWrapper}>
           <FlatList
-            data={data}
+            data={noteList}
             numColumns={2}
-            renderItem={({item}) => (
-              <NoteItem data={item} navigation={navigateToMainScreen} />
+            renderItem={({item, index}) => (
+              <NoteItem
+                data={item}
+                navigation={() => navigateToMainScreen(index)}
+              />
             )}
             keyExtractor={item => item.id.toString()}
           />

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Appbar, Button, IconButton, TextInput} from 'react-native-paper';
 import {Dimensions} from 'react-native';
@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 // import {INoteItem} from '../mocks/data';
 import {EditScreenScreenProps} from './screen.types';
 import {INoteItem} from '../mocks/data';
+import {NoteContext} from '../../App';
 
 const iconRenderItem = () => (
   <Icon name="arrow-back" size={24} color={'#000'} />
@@ -14,27 +15,29 @@ const EditNoteScreen: React.FC<EditScreenScreenProps> = ({
   navigation,
   route,
 }) => {
+  const {noteList, setNoteList} = useContext(NoteContext);
   const [inputTextTitle, setInputTextTitle] = useState<string>(
-    route.params.item.title,
+    noteList[route.params.noteIndex].title,
   );
   const [inputTextShortDes, setInputTextShortDes] = useState<string>(
-    route.params.item.short,
+    noteList[route.params.noteIndex].short,
   );
   const [inputTextDes, setInputTextDes] = useState<string>(
-    route.params.item.description,
+    noteList[route.params.noteIndex].description,
   );
 
   const handleEditNote = () => {
     const itemChanged: INoteItem = {
-      id: route.params.item.id,
+      id: noteList[route.params.noteIndex].id,
       title: inputTextTitle,
       short: inputTextShortDes,
       description: inputTextDes,
       date: new Date(Date.now()),
     };
+    noteList[route.params.noteIndex] = itemChanged;
+    setNoteList(noteList);
     navigation.navigate('MainScreen', {
       name: 'MainScreen',
-      itemChange: itemChanged,
     });
   };
 
