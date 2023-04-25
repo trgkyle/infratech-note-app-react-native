@@ -1,28 +1,76 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {Appbar, IconButton} from 'react-native-paper';
+import {Appbar, Button, IconButton, TextInput} from 'react-native-paper';
 import {Dimensions} from 'react-native';
-import {NoteScreenProps} from './screen.types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+// import {INoteItem} from '../mocks/data';
+import {EditScreenScreenProps} from './screen.types';
+import {INoteItem} from '../mocks/data';
 
 const iconRenderItem = () => (
   <Icon name="arrow-back" size={24} color={'#000'} />
 );
-const NoteList: React.FC<NoteScreenProps> = ({navigation}) => {
+const EditNoteScreen: React.FC<EditScreenScreenProps> = ({
+  navigation,
+  route,
+}) => {
+  const [inputTextTitle, setInputTextTitle] = useState<string>(
+    route.params.item.title,
+  );
+  const [inputTextShortDes, setInputTextShortDes] = useState<string>(
+    route.params.item.short,
+  );
+  const [inputTextDes, setInputTextDes] = useState<string>(
+    route.params.item.description,
+  );
+
+  const handleEditNote = () => {
+    const itemChanged: INoteItem = {
+      id: route.params.item.id,
+      title: inputTextTitle,
+      short: inputTextShortDes,
+      description: inputTextDes,
+      date: new Date(Date.now()),
+    };
+    navigation.navigate('MainScreen', {
+      name: 'MainScreen',
+      itemChange: itemChanged,
+    });
+  };
+
+  const handleBackScreen = () => {
+    navigation.navigate('MainScreen', {name: 'MainScreen'});
+  };
   return (
     <View style={styles.container}>
       <Appbar.Header style={styles.header}>
-        <IconButton
-          icon={() => iconRenderItem()}
-          onPress={() => navigation.goBack()}
-        />
+        <IconButton icon={() => iconRenderItem()} onPress={handleBackScreen} />
         <Appbar.Content
           title={'Edit Note'}
           style={styles.content}
           titleStyle={styles.title}
         />
       </Appbar.Header>
-      <ScrollView style={styles.listContainer} />
+      <ScrollView style={styles.listContainer}>
+        <TextInput
+          value={inputTextTitle}
+          label="Title"
+          onChangeText={setInputTextTitle}
+        />
+        <TextInput
+          value={inputTextShortDes}
+          label="Short Description"
+          onChangeText={setInputTextShortDes}
+        />
+        <TextInput
+          value={inputTextDes}
+          label="Description"
+          onChangeText={setInputTextDes}
+        />
+        <Button mode="contained" onPress={handleEditNote} style={styles.button}>
+          Submit
+        </Button>
+      </ScrollView>
     </View>
   );
 };
@@ -66,6 +114,9 @@ const styles = StyleSheet.create({
   switchStyle: {
     flexShrink: 1,
   },
+  button: {
+    marginVertical: 10,
+  },
 });
 
-export default NoteList;
+export default EditNoteScreen;

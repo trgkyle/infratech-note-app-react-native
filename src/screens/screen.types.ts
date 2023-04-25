@@ -1,15 +1,30 @@
 import {StackNavigationProp} from '@react-navigation/stack';
+import {INoteItem} from '../mocks/data';
+import {RouteProp} from '@react-navigation/native';
 
 export type RootStackParamList = {
-  MainScreen: {name: string};
-  AddNote: {name: string};
+  MainScreen: {name: string; itemChange?: INoteItem; actionType?: string};
+  EditNoteScreen: {name: string; item: INoteItem};
 };
 
-type NoteScreenNavigationProp = StackNavigationProp<
+type MainRouteProp = RouteProp<RootStackParamList, 'MainScreen'>;
+type EditNoteRouteProp = RouteProp<RootStackParamList, 'EditNoteScreen'>;
+
+type MainScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'MainScreen'
 >;
 
-export type NoteScreenProps = {
-  navigation: NoteScreenNavigationProp;
+type EditNoteScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'EditNoteScreen'
+>;
+
+export type MainScreenScreenProps = {
+  route: MainRouteProp;
+  navigation: MainScreenNavigationProp;
+};
+export type EditScreenScreenProps = {
+  route: EditNoteRouteProp;
+  navigation: EditNoteScreenNavigationProp;
 };

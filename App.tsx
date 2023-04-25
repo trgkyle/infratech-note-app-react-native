@@ -11,8 +11,9 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import MainScreen from './src/screens/MainSreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import NoteList from './src/screens/EditNoteScreen';
-const Stack = createStackNavigator();
+import EditNoteScreen from './src/screens/EditNoteScreen';
+import {RootStackParamList} from './src/screens/screen.types';
+const Stack = createStackNavigator<RootStackParamList>();
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'light';
 
@@ -30,7 +31,7 @@ function App(): JSX.Element {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="MainScreen" component={MainScreen} />
-          <Stack.Screen name="AddNote" component={NoteList} />
+          <Stack.Screen name="EditNoteScreen" component={EditNoteScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

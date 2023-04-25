@@ -1,23 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Appbar, FAB, Text, TextInput} from 'react-native-paper';
-import {NoteScreenProps} from './screen.types';
+import {FlatList, StyleSheet, View} from 'react-native';
+import {Appbar, FAB, TextInput} from 'react-native-paper';
 import {INoteItem, defaultNoteList} from '../mocks/data';
+import NoteItem from '../components/NoteItem';
+import {MainScreenScreenProps} from './screen.types';
 
-const Item = ({data}: {data: INoteItem}) => (
-  <TouchableOpacity style={styles.cardWrapper}>
-    <View style={styles.card}>
-      <Text style={styles.cardDateTitle}>{data.date.toDateString()}</Text>
-      <Text style={styles.cardTitle}>{data.title}</Text>
-      <Text style={styles.cardShortDes}>{data.short}</Text>
-      <Text style={styles.cardDescription} numberOfLines={4}>
-        {data.description}
-      </Text>
-    </View>
-  </TouchableOpacity>
-);
-
-const MainScreen: React.FC<NoteScreenProps> = ({navigation}) => {
+const MainScreen: React.FC<MainScreenScreenProps> = ({navigation}) => {
   const [data, setData] = useState<INoteItem[]>(defaultNoteList);
   const [inputTextSearch, setInputTextSearch] = useState<string>('');
   const [sortByAsc, setSortByAsc] = useState<boolean>(false);
@@ -26,6 +14,9 @@ const MainScreen: React.FC<NoteScreenProps> = ({navigation}) => {
     setInputTextSearch(text);
   };
 
+  const navigateToMainScreen = (item: INoteItem) => {
+    navigation.navigate('EditNoteScreen', {name: 'EditNoteScreen', item});
+  };
   const searchNoteByInput = useCallback(
     (inputTextSearchP: string) => {
       const newData = defaultNoteList
@@ -40,10 +31,6 @@ const MainScreen: React.FC<NoteScreenProps> = ({navigation}) => {
     },
     [sortByAsc],
   );
-
-  const buttonAddNoteClick = () => {
-    navigation.navigate('AddNote', {name: 'AddNote'});
-  };
 
   useEffect(() => {
     searchNoteByInput(inputTextSearch);
@@ -74,12 +61,14 @@ const MainScreen: React.FC<NoteScreenProps> = ({navigation}) => {
           <FlatList
             data={data}
             numColumns={2}
-            renderItem={({item}) => <Item data={item} />}
+            renderItem={({item}) => (
+              <NoteItem data={item} navigation={navigateToMainScreen} />
+            )}
             keyExtractor={item => item.id.toString()}
           />
         </View>
       </View>
-      <FAB style={styles.fab} small icon="plus" onPress={buttonAddNoteClick} />
+      <FAB style={styles.fab} small icon="plus" />
     </>
   );
 };
