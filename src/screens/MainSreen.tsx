@@ -15,12 +15,19 @@ const MainScreen: React.FC<MainScreenScreenProps> = ({navigation}) => {
     setInputTextSearch(text);
   };
 
-  const navigateToMainScreen = (index: number) => {
+  const navigateToEditScreen = (index: number) => {
     navigation.navigate('EditNoteScreen', {
       name: 'EditNoteScreen',
       noteIndex: index,
     });
   };
+
+  const navigateToAddScreen = () => {
+    navigation.navigate('AddNoteScreen', {
+      name: 'AddNoteScreen',
+    });
+  };
+
   const searchNoteByInput = useCallback(
     (inputTextSearchP: string) => {
       const newData = defaultNoteList
@@ -68,14 +75,14 @@ const MainScreen: React.FC<MainScreenScreenProps> = ({navigation}) => {
             renderItem={({item, index}) => (
               <NoteItem
                 data={item}
-                navigation={() => navigateToMainScreen(index)}
+                navigation={() => navigateToEditScreen(index)}
               />
             )}
             keyExtractor={item => item.id.toString()}
           />
         </View>
       </View>
-      <FAB style={styles.fab} small icon="plus" />
+      <FAB style={styles.fab} small icon="plus" onPress={navigateToAddScreen} />
     </>
   );
 };

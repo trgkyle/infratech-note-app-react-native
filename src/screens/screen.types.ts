@@ -4,10 +4,13 @@ import {RouteProp} from '@react-navigation/native';
 export type RootStackParamList = {
   MainScreen: {name: string};
   EditNoteScreen: {name: string; noteIndex: number};
+  AddNoteScreen: {name: string};
+  // AddNoteScreen: {name: string};
 };
 
 type MainRouteProp = RouteProp<RootStackParamList, 'MainScreen'>;
 type EditNoteRouteProp = RouteProp<RootStackParamList, 'EditNoteScreen'>;
+type AddNoteRouteProp = RouteProp<RootStackParamList, 'AddNoteScreen'>;
 
 type MainScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -19,11 +22,21 @@ type EditNoteScreenNavigationProp = StackNavigationProp<
   'EditNoteScreen'
 >;
 
+type AddNoteScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'AddNoteScreen'
+>;
+
 export type MainScreenScreenProps = {
   route: MainRouteProp;
   navigation: MainScreenNavigationProp;
 };
-export type EditScreenScreenProps = {
+
+export type EditNoteScreenScreenProps = {
   route: EditNoteRouteProp;
   navigation: EditNoteScreenNavigationProp;
+};
+export type AddNoteScreenScreenProps = {
+  route: AddNoteRouteProp;
+  navigation: AddNoteScreenNavigationProp;
 };

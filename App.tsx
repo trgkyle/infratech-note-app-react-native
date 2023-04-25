@@ -14,6 +14,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import EditNoteScreen from './src/screens/EditNoteScreen';
 import {RootStackParamList} from './src/screens/screen.types';
 import {INoteItem, defaultNoteList} from './src/mocks/data';
+import AddNoteScreen from './src/screens/AddNoteScreen';
 const Stack = createStackNavigator<RootStackParamList>();
 
 interface NoteContextValue {
@@ -45,6 +46,7 @@ function App(): JSX.Element {
           <Stack.Navigator screenOptions={{headerShown: false}}>
             <Stack.Screen name="MainScreen" component={MainScreen} />
             <Stack.Screen name="EditNoteScreen" component={EditNoteScreen} />
+            <Stack.Screen name="AddNoteScreen" component={AddNoteScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </NoteContext.Provider>

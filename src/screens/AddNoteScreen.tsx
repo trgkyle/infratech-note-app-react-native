@@ -4,37 +4,28 @@ import {Appbar, Button, IconButton, TextInput} from 'react-native-paper';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 // import {INoteItem} from '../mocks/data';
-import {EditNoteScreenScreenProps} from './screen.types';
+import {AddNoteScreenScreenProps} from './screen.types';
 import {INoteItem} from '../mocks/data';
 import {NoteContext} from '../../App';
 
 const iconRenderItem = () => (
   <Icon name="arrow-back" size={24} color={'#000'} />
 );
-const EditNoteScreen: React.FC<EditNoteScreenScreenProps> = ({
-  navigation,
-  route,
-}) => {
+const AddNoteScreen: React.FC<AddNoteScreenScreenProps> = ({navigation}) => {
   const {noteList, setNoteList} = useContext(NoteContext);
-  const [inputTextTitle, setInputTextTitle] = useState<string>(
-    noteList[route.params.noteIndex].title,
-  );
-  const [inputTextShortDes, setInputTextShortDes] = useState<string>(
-    noteList[route.params.noteIndex].short,
-  );
-  const [inputTextDes, setInputTextDes] = useState<string>(
-    noteList[route.params.noteIndex].description,
-  );
+  const [inputTextTitle, setInputTextTitle] = useState<string>('');
+  const [inputTextShortDes, setInputTextShortDes] = useState<string>('');
+  const [inputTextDes, setInputTextDes] = useState<string>('');
 
   const handleEditNote = () => {
     const itemChanged: INoteItem = {
-      id: noteList[route.params.noteIndex].id,
+      id: noteList.length,
       title: inputTextTitle,
       short: inputTextShortDes,
       description: inputTextDes,
       date: new Date(Date.now()),
     };
-    noteList[route.params.noteIndex] = itemChanged;
+    noteList.push(itemChanged);
     setNoteList(noteList);
     navigation.navigate('MainScreen', {
       name: 'MainScreen',
@@ -49,7 +40,7 @@ const EditNoteScreen: React.FC<EditNoteScreenScreenProps> = ({
       <Appbar.Header style={styles.header}>
         <IconButton icon={() => iconRenderItem()} onPress={handleBackScreen} />
         <Appbar.Content
-          title={'Edit Note'}
+          title={'Add Note'}
           style={styles.content}
           titleStyle={styles.title}
         />
@@ -122,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditNoteScreen;
+export default AddNoteScreen;
